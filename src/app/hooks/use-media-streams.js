@@ -1,9 +1,15 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 const useMediaStream = () => {
   const [stream, setStream] = useState();
 
+  const hasStream = useRef();
+
   useEffect(() => {
+    if (hasStream.current) return;
+
+    hasStream.current = true;
+
     (async () => {
       const openMediaDevices = async (constraints) => {
         return await navigator.mediaDevices.getUserMedia(constraints);

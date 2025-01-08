@@ -21,9 +21,10 @@ function Room() {
     if (!socket || !stream || !peer) return;
 
     const handleUserConnected = (userId) => {
-      console.log(console.log("user connected", userId));
+      console.log("user connected", userId);
 
       var call = peer.call(userId, stream);
+      console.log(call, "call");
 
       call.on("stream", function (remoteStream) {
         console.log("incomming stream");
@@ -33,7 +34,7 @@ function Room() {
           ...prev,
           [userId]: {
             muted: true,
-            playerId: callerId,
+            playerId: userId,
             playing: true,
             stream: remoteStream,
           },
@@ -47,7 +48,7 @@ function Room() {
   }, [socket, peer, stream]);
 
   useEffect(() => {
-    if (!peer) return;
+    if (!peer || !stream) return;
 
     peer.on("call", (call) => {
       const { peer: callerId } = call;
@@ -67,10 +68,10 @@ function Room() {
         }));
       });
     });
-  }, [peer]);
+  }, [peer, stream]);
 
   useEffect(() => {
-    if (!stream) return;
+    if (!stream || !id) return;
 
     setPlayers((prev) => ({
       ...prev,
@@ -81,15 +82,17 @@ function Room() {
         stream,
       },
     }));
-  }, []);
+  }, [stream, id]);
+
+  console.dir(players, "players");
+
+  console.log(stream, id, "stream id");
+
+  const newPlayers = Object.keys(players).map((item) => players[item]);
+  console.log(newPlayers);
 
   return (
-    <div>
-      {isClient &&
-        Object.keys(players).map((items) => {
-          return <ReactPlayer {...items} />;
-        })}
-    </div>
+    <div>{isClient && newPlayers.map((item) => <ReactPlayer {...item} />)}</div>
   );
 }
 
