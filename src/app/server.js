@@ -13,8 +13,15 @@ app.prepare().then(() => {
   const httpServer = createServer(handler);
 
   const io = new Server(httpServer);
+
   io.on("connection", (socket) => {
-    console.log(socket, "server connected");
+    console.log("connect");
+    socket.on("join-room", (roomid, id) => {
+      console.log(roomid, id, "roomid, id");
+
+      socket.join(roomid);
+      socket.broadcast.to(roomid).emit("user-connected", id);
+    });
   });
 
   httpServer

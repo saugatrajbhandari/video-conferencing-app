@@ -11,13 +11,13 @@ export default function LobbyPage() {
   const handleJoinRoom = (e) => {
     e.preventDefault();
     if (roomId.trim()) {
-      router.push(`/room/${roomId}`);
+      router.push(`/${roomId}`);
     }
   };
 
   const handleCreateRoom = () => {
     const newRoomId = uuidv4();
-    router.push(`/room/${newRoomId}`);
+    router.push(`/${newRoomId}`);
   };
 
   return (

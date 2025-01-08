@@ -10,7 +10,6 @@ export const SocketProvider = ({ children }) => {
 
   useEffect(() => {
     const connection = io();
-
     setSocket(connection);
   }, []);
 
